@@ -3,6 +3,8 @@ package main
 import (
 	"image"
 	"image/jpeg"
+	"image/gif"
+	"image/png"
 	"io"
 
 	"github.com/disintegration/gift"
@@ -105,6 +107,12 @@ func (processor *Processor) Execute(src *Image, dst io.Writer, query *Query) {
 		}
 	}
 
-	// default
-	jpeg.Encode(dst, src.Object, &jpeg.Options{Quality: quality})
+	switch src.Format {
+		case JPEG:
+			jpeg.Encode(dst, src.Object, &jpeg.Options{Quality: quality})
+		case GIF:
+			gif.Encode(dst, src.Object, &gif.Options{})
+		case PNG:
+			png.Encode(dst, src.Object)
+	}
 }
